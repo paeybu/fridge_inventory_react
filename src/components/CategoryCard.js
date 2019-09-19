@@ -36,8 +36,11 @@ const CategoryCard = () => {
   }
 
   const onClick = () => {
-    const form = document.querySelector('.add-inventory')
-    form.classList.toggle('hidden')
+    const forms = document.querySelectorAll('.add-inventory')
+    const forms_a = [...forms]
+    forms_a.map(form => {
+      form.classList.toggle('hidden')
+    })
   }
   return (
     <div className="card">
