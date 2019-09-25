@@ -1,5 +1,4 @@
 import React from 'react'
-import { setPriority } from 'os'
 import M from 'materialize-css'
 
 const InventoryForm = ({

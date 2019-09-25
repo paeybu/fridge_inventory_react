@@ -1,15 +1,27 @@
 import React from 'react'
 
-const InventoryItem = ({ item }) => {
+const InventoryItem = ({ item, deleteItem }) => {
   const classNamePriority = () => {
-    if (item.priority === 1) return 'red-text'
-    else if (item.priority === 2) return 'orange-text'
-    else return 'green-text'
+    if (item.priority === 1) return 'red-text clearfix'
+    else if (item.priority === 2) return 'orange-text clearfix'
+    else return 'green-text clearfix'
   }
+
   return (
     <>
       <li className={classNamePriority()}>
-        {item.name} : {item.amount}
+        <span>
+          {item.name} : {item.amount}
+        </span>
+        <a
+          href="#"
+          className="right"
+          onClick={() => {
+            if (window.confirm('คุณต้องการลบรายการนี้ไหม?')) deleteItem(item.id)
+          }}
+        >
+          <i className="material-icons red-text text-darken-2">remove_circle</i>
+        </a>
       </li>
     </>
   )
