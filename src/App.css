@@ -66,3 +66,16 @@ a:focus.active {
 #menu-card {
   line-height: 30px;
 }
+
+input::placeholder {
+  color: #666;
+}
+
+.btn {
+  border-radius: 5px !important;
+}
+
+button {
+  border: none;
+  background: none;
+}

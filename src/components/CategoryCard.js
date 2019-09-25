@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from 'react'
-import axios from 'axios'
 import InvetoryItem from './InventoryItem'
 import InventoryForm from './InventoryForm'
-import uuid from 'uuid/v4'
 import M from 'materialize-css'
+import { db } from '../Firebase'
 
 const CategoryCard = () => {
-  const [inventories, setInventories] = useState(null)
+  const [inventories, setInventories] = useState([])
   const [name, setName] = useState('')
   const [amount, setAmount] = useState('')
   const [priority, setPriority] = useState('1')
@@ -16,22 +15,32 @@ const CategoryCard = () => {
   }, [])
 
   const fetchData = async () => {
-    const res = await axios.get('/inventory?_sort=priority&_order=asc')
-    console.log(res.data)
-    setInventories(res.data)
+    const invenRef = db.collection('inventories')
+    await invenRef.onSnapshot(docSnapshot => {
+      setInventories([])
+      const docs = docSnapshot.docs
+      docs.forEach(doc => {
+        setInventories(prev => [
+          ...prev,
+          {
+            id: doc.id,
+            ...doc.data()
+          }
+        ])
+      })
+    })
   }
 
   const addInven = async category => {
-    await axios.post('/inventory', {
-      id: uuid(),
-      name: name,
-      amount: amount,
+    let addDoc = await db.collection('inventories').add({
+      name,
+      amount,
       priority: parseInt(priority),
       category: category
     })
-    fetchData()
-    setName('')
-    setAmount('')
+
+    console.log(addDoc)
+
     M.toast({ html: 'เพิ่มแล้ว' })
   }
 
@@ -45,9 +54,10 @@ const CategoryCard = () => {
   }
 
   const deleteItem = async id => {
-    await axios.delete(`/inventory/${id}`)
+    db.collection('inventories')
+      .doc(id)
+      .delete()
     M.toast({ html: `ลบแล้ว, id: ${id}` })
-    fetchData()
   }
   return (
     <>

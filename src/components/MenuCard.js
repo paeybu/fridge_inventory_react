@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react'
-import axios from 'axios'
 import MenuForm from './MenuForm'
 import MenuItem from './MenuItem'
-import uuid from 'uuid/v4'
 import M from 'materialize-css'
+import { db } from '../Firebase'
 
 const MenuCard = () => {
   const [menu, setMenu] = useState(null)
@@ -15,21 +14,31 @@ const MenuCard = () => {
   }, [])
 
   const fetchData = async () => {
-    const res = await axios.get('/menu')
-    console.log(res.data)
-    setMenu(res.data)
+    const invenRef = db.collection('menus')
+    await invenRef.onSnapshot(docSnapshot => {
+      setMenu([])
+      const docs = docSnapshot.docs
+      docs.forEach(doc => {
+        setMenu(prev => [
+          ...prev,
+          {
+            id: doc.id,
+            ...doc.data()
+          }
+        ])
+      })
+    })
   }
 
   const addMenu = async () => {
-    await axios.post('/menu', {
-      id: uuid(),
-      name: name,
+    let addDoc = await db.collection('menus').add({
+      name,
       preparation_time: preparationTime
     })
-    fetchData()
-    setName('')
-    setPreparationTime('')
-    M.toast({ html: 'เพิ่มแล้ว' })
+
+    console.log(addDoc)
+
+    M.toast({ html: `เพิ่มแล้ว ${addDoc.id}` })
   }
 
   const onClick = () => {
@@ -38,9 +47,10 @@ const MenuCard = () => {
   }
 
   const deleteItem = async id => {
-    await axios.delete(`/menu/${id}`)
+    db.collection('menus')
+      .doc(id)
+      .delete()
     M.toast({ html: `ลบแล้ว, id: ${id}` })
-    fetchData()
   }
   return (
     <div className="card move-down" id="menu-card">

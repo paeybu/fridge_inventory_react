@@ -13,15 +13,14 @@ const InventoryItem = ({ item, deleteItem }) => {
         <span>
           {item.name} : {item.amount}
         </span>
-        <a
-          href="#"
+        <button
           className="right"
           onClick={() => {
             if (window.confirm('คุณต้องการลบรายการนี้ไหม?')) deleteItem(item.id)
           }}
         >
           <i className="material-icons red-text text-darken-2">remove_circle</i>
-        </a>
+        </button>
       </li>
     </>
   )
