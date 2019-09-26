@@ -14,7 +14,7 @@ const MenuCard = () => {
   }, [])
 
   const fetchData = async () => {
-    const invenRef = db.collection('menus')
+    const invenRef = db.collection('menus').orderBy('preparation_time')
     await invenRef.onSnapshot(docSnapshot => {
       setMenu([])
       const docs = docSnapshot.docs
