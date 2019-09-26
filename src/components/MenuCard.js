@@ -36,7 +36,8 @@ const MenuCard = () => {
       preparation_time: preparationTime
     })
 
-    console.log(addDoc)
+    setName('')
+    setPreparationTime('')
 
     M.toast({ html: `เพิ่มแล้ว ${addDoc.id}` })
   }

@@ -39,7 +39,9 @@ const CategoryCard = () => {
       category: category
     })
 
-    console.log(addDoc)
+    setName('')
+    setAmount('')
+    setPriority('1')
 
     M.toast({ html: 'เพิ่มแล้ว' })
   }
